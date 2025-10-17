@@ -170,27 +170,27 @@ export default function EventManagement() {
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Event Details</h3>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">
+                <label className="block text-sm font-semibold text-gray-900 mb-1">
                   Event Title <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   value={formData.title}
                   onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-                  className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
+                  className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 text-gray-900 placeholder-gray-500"
                   placeholder="Enter a descriptive title for your event"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">
+                <label className="block text-sm font-semibold text-gray-900 mb-1">
                   Description
                 </label>
                 <textarea
                   value={formData.description}
                   onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                  className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
+                  className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 text-gray-900 placeholder-gray-500"
                   rows={4}
                   placeholder="Provide additional details about the event"
                 />
@@ -201,7 +201,7 @@ export default function EventManagement() {
           <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Participants</h3>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="block text-sm font-semibold text-gray-900 mb-2">
                 Assign to Profiles <span className="text-red-500">*</span>
               </label>
               <p className="text-sm text-gray-500 mb-3">Select the users who should participate in this event</p>
@@ -214,8 +214,8 @@ export default function EventManagement() {
                       onChange={() => handleProfileToggle(user._id)}
                       className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
                     />
-                    <span className="text-sm font-medium text-gray-700">
-                      {user.name} {user.isAdmin && <span className="text-blue-600 text-xs">(Admin)</span>}
+                    <span className="text-sm font-medium text-gray-900">
+                      {user.name} {user.isAdmin && <span className="text-blue-600 text-xs font-semibold">(Admin)</span>}
                     </span>
                   </label>
                 ))}
@@ -226,14 +226,14 @@ export default function EventManagement() {
           <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Time Zone</h3>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="block text-sm font-semibold text-gray-900 mb-2">
                 Event Time Zone <span className="text-red-500">*</span>
               </label>
               <p className="text-sm text-gray-500 mb-3">Select the time zone in which the event will take place</p>
               <select
                 value={formData.timezone}
                 onChange={(e) => setFormData(prev => ({ ...prev, timezone: e.target.value }))}
-                className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 bg-white"
+                className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 bg-white text-gray-900"
               >
                 <option value="UTC">UTC (Coordinated Universal Time)</option>
                 <option value="America/New_York">Eastern Time (ET)</option>
@@ -255,22 +255,22 @@ export default function EventManagement() {
                 <h4 className="text-sm font-semibold text-gray-700 mb-3">Start Date and Time <span className="text-red-500">*</span></h4>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm text-gray-600 mb-1">Date</label>
+                    <label className="block text-sm font-medium text-gray-900 mb-1">Date</label>
                     <input
                       type="date"
                       value={formData.startDate}
                       onChange={(e) => setFormData(prev => ({ ...prev, startDate: e.target.value }))}
-                      className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 bg-white"
+                      className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 bg-white text-gray-900"
                       required
                     />
                   </div>
                   <div>
-                    <label className="block text-sm text-gray-600 mb-1">Time</label>
+                    <label className="block text-sm font-medium text-gray-900 mb-1">Time</label>
                     <input
                       type="time"
                       value={formData.startTime}
                       onChange={(e) => setFormData(prev => ({ ...prev, startTime: e.target.value }))}
-                      className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 bg-white"
+                      className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 bg-white text-gray-900"
                       required
                     />
                   </div>
@@ -281,22 +281,22 @@ export default function EventManagement() {
                 <h4 className="text-sm font-semibold text-gray-700 mb-3">End Date and Time <span className="text-red-500">*</span></h4>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm text-gray-600 mb-1">Date</label>
+                    <label className="block text-sm font-medium text-gray-900 mb-1">Date</label>
                     <input
                       type="date"
                       value={formData.endDate}
                       onChange={(e) => setFormData(prev => ({ ...prev, endDate: e.target.value }))}
-                      className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 bg-white"
+                      className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 bg-white text-gray-900"
                       required
                     />
                   </div>
                   <div>
-                    <label className="block text-sm text-gray-600 mb-1">Time</label>
+                    <label className="block text-sm font-medium text-gray-900 mb-1">Time</label>
                     <input
                       type="time"
                       value={formData.endTime}
                       onChange={(e) => setFormData(prev => ({ ...prev, endTime: e.target.value }))}
-                      className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 bg-white"
+                      className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 bg-white text-gray-900"
                       required
                     />
                   </div>
