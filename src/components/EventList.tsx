@@ -186,8 +186,8 @@ export default function EventList() {
                 <div>
                   <h3 className="font-medium text-gray-900 mb-2">Update History</h3>
                   <div className="space-y-2 max-h-40 overflow-y-auto">
-                    {eventLogs.map((log, index) => (
-                      <div key={index} className="p-3 bg-gray-50 rounded-md">
+                    {eventLogs.map((log) => (
+                      <div key={log._id} className="p-3 bg-gray-50 rounded-md">
                         <div className="flex justify-between items-start mb-2">
                           <span className="text-sm font-medium text-gray-900">
                             Updated by {log.updatedBy.name}
@@ -197,8 +197,8 @@ export default function EventList() {
                           </span>
                         </div>
                         <div className="space-y-1">
-                          {log.changes.map((change: any, changeIndex: number) => (
-                            <div key={changeIndex} className="text-sm">
+                          {log.changes.map((change: any) => (
+                            <div key={`${log._id}-${change.field}`} className="text-sm">
                               <span className="font-medium text-gray-700">{change.field}:</span>{' '}
                               <span className="text-red-600 line-through">{String(change.oldValue)}</span>
                               {' → '}
