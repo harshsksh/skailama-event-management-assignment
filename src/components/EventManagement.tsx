@@ -54,6 +54,12 @@ export default function EventManagement() {
       return;
     }
 
+    // Validate current user exists and has valid ID
+    if (!currentUser || !currentUser._id) {
+      setError('No current user found. Please refresh the page and try again.');
+      return;
+    }
+
     try {
       setLoading(true);
       
@@ -82,14 +88,18 @@ export default function EventManagement() {
         timezone: formData.timezone,
         startDate: startInTz.toISOString(),
         endDate: endInTz.toISOString(),
-        createdBy: currentUser!._id,
+        createdBy: currentUser._id,
       };
 
+      console.log('Creating event with data:', eventData);
+      console.log('Current user:', currentUser);
+      console.log('CreatedBy ID:', currentUser._id, 'Type:', typeof currentUser._id);
       const newEvent = await apiService.createEvent(eventData);
       addEvent(newEvent);
       resetForm();
       setIsCreating(false);
     } catch (error: any) {
+      console.error('Event creation error:', error);
       setError(error.message || 'Failed to create event');
     } finally {
       setLoading(false);

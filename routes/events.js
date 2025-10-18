@@ -89,7 +89,7 @@ router.post('/', async (req, res) => {
 
     // Validate createdBy exists
     try {
-      const creator = await mongoose.model('User').findById(createdBy);
+      const creator = await User.findById(createdBy);
       if (!creator) {
         console.log('Creator not found:', createdBy);
         return res.status(400).json({ message: 'Invalid creator ID' });
@@ -101,7 +101,7 @@ router.post('/', async (req, res) => {
 
     // Validate profiles exist
     try {
-      const validProfiles = await mongoose.model('User').find({ _id: { $in: profiles } });
+      const validProfiles = await User.find({ _id: { $in: profiles } });
       if (validProfiles.length !== profiles.length) {
         console.log('Some profiles not found:', {
           requested: profiles,
