@@ -71,7 +71,6 @@ export default function ProfileManagement() {
           </form>
         </div>
       )}
-
       <div className="space-y-4">
         {users.length === 0 ? (
           <div className="text-center py-8 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">

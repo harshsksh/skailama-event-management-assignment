@@ -3,10 +3,9 @@
 import { useEffect, useState } from 'react';
 import { useStore } from '@/store/useStore';
 import { apiService } from '@/services/api';
-import ProfileManagement from '@/components/ProfileManagement';
 import EventManagement from '@/components/EventManagement';
 import EventList from '@/components/EventList';
-import TimezoneSelector from '@/components/TimezoneSelector';
+import ProfileDropdown from '@/components/ProfileDropdown';
 
 export default function Home() {
   const {
@@ -130,10 +129,7 @@ export default function Home() {
               </p>
             </div>
             <div className="flex items-center space-x-4">
-              <TimezoneSelector
-                selectedTimezone={selectedTimezone}
-                onTimezoneChange={handleTimezoneChange}
-              />
+              <ProfileDropdown />
             </div>
           </div>
         </div>
@@ -148,9 +144,6 @@ export default function Home() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div className="space-y-8">
-            {currentUser.isAdmin && (
-              <ProfileManagement />
-            )}
             <EventManagement />
           </div>
           <div>
