@@ -66,8 +66,52 @@ router.post('/', async (req, res) => {
   try {
     const { title, description, profiles, timezone: eventTimezone, startDate, endDate, createdBy } = req.body;
 
+    // Log incoming request data
+    console.log('Creating event with data:', {
+      title,
+      profiles,
+      eventTimezone,
+      startDate,
+      endDate,
+      createdBy
+    });
+
     if (!title || !profiles || !startDate || !endDate || !createdBy) {
+      console.log('Missing required fields:', { title, profiles, startDate, endDate, createdBy });
       return res.status(400).json({ message: 'Missing required fields' });
+    }
+
+    // Validate profiles array
+    if (!Array.isArray(profiles) || profiles.length === 0) {
+      console.log('Invalid profiles array:', profiles);
+      return res.status(400).json({ message: 'Profiles must be a non-empty array' });
+    }
+
+    // Validate createdBy exists
+    try {
+      const creator = await mongoose.model('User').findById(createdBy);
+      if (!creator) {
+        console.log('Creator not found:', createdBy);
+        return res.status(400).json({ message: 'Invalid creator ID' });
+      }
+    } catch (err) {
+      console.error('Error validating creator:', err);
+      return res.status(400).json({ message: 'Invalid creator ID format' });
+    }
+
+    // Validate profiles exist
+    try {
+      const validProfiles = await mongoose.model('User').find({ _id: { $in: profiles } });
+      if (validProfiles.length !== profiles.length) {
+        console.log('Some profiles not found:', {
+          requested: profiles,
+          found: validProfiles.map(p => p._id)
+        });
+        return res.status(400).json({ message: 'One or more invalid profile IDs' });
+      }
+    } catch (err) {
+      console.error('Error validating profiles:', err);
+      return res.status(400).json({ message: 'Invalid profile ID format' });
     }
 
     // Validate dates
@@ -75,16 +119,25 @@ router.post('/', async (req, res) => {
     const end = dayjs(endDate);
 
     if (!start.isValid() || !end.isValid()) {
+      console.log('Invalid date format:', { startDate, endDate });
       return res.status(400).json({ message: 'Invalid date format' });
     }
 
     if (end.isBefore(start)) {
+      console.log('End date before start date:', { start: start.toISOString(), end: end.toISOString() });
       return res.status(400).json({ message: 'End date must be after start date' });
     }
 
     // Convert dates to UTC for storage
     const startDateUTC = start.tz(eventTimezone).utc().toDate();
     const endDateUTC = end.tz(eventTimezone).utc().toDate();
+
+    console.log('Converted dates:', {
+      originalStart: startDate,
+      originalEnd: endDate,
+      startUTC: startDateUTC.toISOString(),
+      endUTC: endDateUTC.toISOString()
+    });
 
     const event = new Event({
       title,
@@ -100,9 +153,15 @@ router.post('/', async (req, res) => {
     await event.populate('profiles', 'name timezone');
     await event.populate('createdBy', 'name');
 
+    console.log('Event created successfully:', event._id);
     res.status(201).json(event);
   } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.message });
+    console.error('Server error in event creation:', error);
+    res.status(500).json({ 
+      message: 'Server error', 
+      error: error.message,
+      details: error.stack 
+    });
   }
 });
 

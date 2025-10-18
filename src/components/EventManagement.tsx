@@ -27,19 +27,28 @@ export default function EventManagement() {
 
   const handleCreateEvent = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.title || !formData.profiles.length || !formData.startDate || !formData.endDate) {
-      setError('Please fill in all required fields');
+    if (!formData.title || !formData.profiles.length || !formData.startDate || !formData.endDate || !formData.startTime || !formData.endTime) {
+      setError('Please fill in all required fields including start and end times');
       return;
     }
 
     try {
       setLoading(true);
       
-      // Combine date and time
-      const startDateTime = dayjs(`${formData.startDate} ${formData.startTime}`).tz(formData.timezone);
-      const endDateTime = dayjs(`${formData.endDate} ${formData.endTime}`).tz(formData.timezone);
+      // Combine date and time with validation
+      const startDateTime = dayjs(`${formData.startDate} ${formData.startTime || '00:00'}`);
+      const endDateTime = dayjs(`${formData.endDate} ${formData.endTime || '23:59'}`);
+      
+      if (!startDateTime.isValid() || !endDateTime.isValid()) {
+        setError('Invalid date or time format');
+        return;
+      }
+      
+      // Convert to selected timezone
+      const startInTz = startDateTime.tz(formData.timezone);
+      const endInTz = endDateTime.tz(formData.timezone);
 
-      if (endDateTime.isBefore(startDateTime)) {
+      if (endInTz.isBefore(startInTz)) {
         setError('End date/time must be after start date/time');
         return;
       }
@@ -49,8 +58,8 @@ export default function EventManagement() {
         description: formData.description,
         profiles: formData.profiles,
         timezone: formData.timezone,
-        startDate: startDateTime.toISOString(),
-        endDate: endDateTime.toISOString(),
+        startDate: startInTz.toISOString(),
+        endDate: endInTz.toISOString(),
         createdBy: currentUser!._id,
       };
 
@@ -72,11 +81,20 @@ export default function EventManagement() {
     try {
       setLoading(true);
       
-      // Combine date and time
-      const startDateTime = dayjs(`${formData.startDate} ${formData.startTime}`).tz(formData.timezone);
-      const endDateTime = dayjs(`${formData.endDate} ${formData.endTime}`).tz(formData.timezone);
+      // Combine date and time with validation
+      const startDateTime = dayjs(`${formData.startDate} ${formData.startTime || '00:00'}`);
+      const endDateTime = dayjs(`${formData.endDate} ${formData.endTime || '23:59'}`);
+      
+      if (!startDateTime.isValid() || !endDateTime.isValid()) {
+        setError('Invalid date or time format');
+        return;
+      }
+      
+      // Convert to selected timezone
+      const startInTz = startDateTime.tz(formData.timezone);
+      const endInTz = endDateTime.tz(formData.timezone);
 
-      if (endDateTime.isBefore(startDateTime)) {
+      if (endInTz.isBefore(startInTz)) {
         setError('End date/time must be after start date/time');
         return;
       }
@@ -86,8 +104,8 @@ export default function EventManagement() {
         description: formData.description,
         profiles: formData.profiles,
         timezone: formData.timezone,
-        startDate: startDateTime.toISOString(),
-        endDate: endDateTime.toISOString(),
+        startDate: startInTz.toISOString(),
+        endDate: endInTz.toISOString(),
         updatedBy: currentUser!._id,
         userTimezone: selectedTimezone,
       };
