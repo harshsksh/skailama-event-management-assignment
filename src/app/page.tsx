@@ -106,9 +106,9 @@ export default function Home() {
   if (!currentUser) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="max-w-md w-full bg-white rounded-lg shadow-md p-6">
-          <h1 className="text-2xl font-bold text-center mb-6">Event Management System</h1>
-          <h2 className="text-xl font-semibold mb-4">Admin Setup</h2>
+        <div className="max-w-md w-full bg-white rounded-lg shadow-md p-6 border border-purple-200">
+          <h1 className="text-2xl font-bold text-center mb-6 text-purple-900">Event Management System</h1>
+          <h2 className="text-xl font-semibold mb-4 text-purple-800">Admin Setup</h2>
           <p className="text-gray-600 mb-6">
             Welcome! Please set up an admin account to get started.
           </p>
@@ -120,11 +120,11 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow-sm border-b">
+      <header className="bg-purple-50 shadow-sm border-b border-purple-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Event Management System</h1>
+              <h1 className="text-2xl font-bold text-purple-900">Event Management System</h1>
               <p className="text-sm text-gray-600">
                 Welcome, {currentUser.name} {currentUser.isAdmin && '(Admin)'}
               </p>
@@ -184,7 +184,7 @@ function AdminSetupForm({ onSubmit, isLoading }: { onSubmit: (name: string, time
           id="name"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
           placeholder="Enter admin name"
           required
         />
@@ -198,7 +198,7 @@ function AdminSetupForm({ onSubmit, isLoading }: { onSubmit: (name: string, time
           id="timezone"
           value={timezone}
           onChange={(e) => setTimezone(e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
         >
           <option value="UTC">UTC</option>
           <option value="America/New_York">Eastern Time</option>
@@ -215,7 +215,7 @@ function AdminSetupForm({ onSubmit, isLoading }: { onSubmit: (name: string, time
       <button
         type="submit"
         disabled={isLoading || !name.trim()}
-        className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {isLoading ? 'Setting up...' : 'Setup Admin Account'}
       </button>

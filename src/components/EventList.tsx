@@ -73,7 +73,7 @@ export default function EventList({ editingEvent, setEditingEvent }: { editingEv
     const end = dayjs(event.endDate);
 
     if (now.isBefore(start)) {
-      return { status: 'upcoming', color: 'bg-blue-100 text-blue-800' };
+      return { status: 'upcoming', color: 'bg-purple-100 text-purple-800' };
     } else if (now.isAfter(end)) {
       return { status: 'completed', color: 'bg-gray-100 text-gray-800' };
     } else {
@@ -97,7 +97,7 @@ export default function EventList({ editingEvent, setEditingEvent }: { editingEv
           onChange={(e) => {
             setSelectedTimezone(e.target.value);
           }}
-          className="w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+          className="w-full px-3 py-2 bg-purple-100 border border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-gray-900"
         >
           <option value="UTC">UTC (Coordinated Universal Time)</option>
           <option value="America/New_York">Eastern Time (ET)</option>
@@ -247,16 +247,16 @@ export default function EventList({ editingEvent, setEditingEvent }: { editingEv
                       key={profile._id}
                       className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg"
                     >
-                      <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                        <span className="text-blue-600 font-semibold text-sm">
-                          {profile.name.charAt(0).toUpperCase()}
-                        </span>
-                      </div>
+                        <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
+                          <span className="text-purple-600 font-semibold text-sm">
+                            {profile.name.charAt(0).toUpperCase()}
+                          </span>
+                        </div>
                       <div className="flex-1">
                         <div className="flex items-center space-x-2">
                           <span className="font-medium text-gray-900">{profile.name}</span>
                           {profile.isAdmin && (
-                            <span className="px-2 py-1 text-xs font-semibold bg-blue-100 text-blue-800 rounded-full">
+                            <span className="px-2 py-1 text-xs font-semibold bg-purple-100 text-purple-800 rounded-full">
                               Admin
                             </span>
                           )}

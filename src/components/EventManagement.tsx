@@ -262,7 +262,7 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
         {!isCreating && (
           <button
             onClick={() => setIsCreating(true)}
-            className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200 text-base font-medium"
+              className="bg-purple-600 text-white px-6 py-2 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors duration-200 text-base font-medium"
           >
             Create Event
           </button>
@@ -283,7 +283,7 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
                   type="text"
                   value={formData.title}
                   onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-                  className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 text-gray-900 placeholder-gray-500"
+                  className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors duration-200 text-gray-900 placeholder-gray-500"
                   placeholder="Enter a descriptive title for your event"
                   required
                 />
@@ -296,7 +296,7 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
                 <textarea
                   value={formData.description}
                   onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                  className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 text-gray-900 placeholder-gray-500"
+                  className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors duration-200 text-gray-900 placeholder-gray-500"
                   rows={4}
                   placeholder="Provide additional details about the event"
                 />
@@ -311,7 +311,7 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
               <button
                 type="button"
                 onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
-                className="w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 text-left"
+                  className="w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500 text-left"
               >
                 <span className="text-gray-700">
                   {selectedProfiles.length > 0 
@@ -350,7 +350,7 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
                           placeholder="Search profiles..."
                           value={profileSearchTerm}
                           onChange={(e) => setProfileSearchTerm(e.target.value)}
-                          className="w-full pl-10 pr-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 placeholder-gray-500"
+                          className="w-full pl-10 pr-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-gray-900 placeholder-gray-500"
                         />
                       </div>
                     </div>
@@ -372,16 +372,16 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
                       type="checkbox"
                                 checked={formData.profiles.includes(profile._id)}
                                 onChange={() => handleProfileToggle(profile._id)}
-                      className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
+                      className="w-4 h-4 rounded border-gray-300 text-purple-600 focus:ring-2 focus:ring-purple-500"
                     />
                               <div className="flex items-center space-x-2">
-                                <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
-                                  <span className="text-blue-600 font-semibold text-xs">
-                                    {profile.name.charAt(0).toUpperCase()}
-                                  </span>
-                                </div>
+                                        <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center">
+                                          <span className="text-purple-600 font-semibold text-xs">
+                                            {profile.name.charAt(0).toUpperCase()}
+                                          </span>
+                                        </div>
                     <span className="text-sm font-medium text-gray-900">
-                                  {profile.name} {profile.isAdmin && <span className="text-blue-600 text-xs">(Admin)</span>}
+                                            {profile.name} {profile.isAdmin && <span className="text-purple-600 text-xs">(Admin)</span>}
                     </span>
                               </div>
                   </label>
@@ -396,7 +396,7 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
                         <button
                           type="button"
                           onClick={() => setIsCreatingProfile(true)}
-                          className="w-full flex items-center justify-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full flex items-center justify-center space-x-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
                         >
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -414,7 +414,7 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
                               placeholder="Enter profile name..."
                               value={newProfileName}
                               onChange={(e) => setNewProfileName(e.target.value)}
-                              className="w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 placeholder-gray-500"
+                              className="w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-gray-900 placeholder-gray-500"
                               autoFocus
                               onKeyDown={(e) => {
                                 if (e.key === 'Enter') {
@@ -429,7 +429,7 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
                               type="button"
                               onClick={handleCreateProfile}
                               disabled={!newProfileName.trim()}
-                              className="flex-1 bg-blue-600 text-white py-2 px-3 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                              className="flex-1 bg-purple-600 text-white py-2 px-3 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                               Create
                             </button>
@@ -460,7 +460,7 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
               <select
                 value={formData.timezone}
                 onChange={(e) => setFormData(prev => ({ ...prev, timezone: e.target.value }))}
-                className="w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 appearance-none"
+                className="w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-gray-900 appearance-none"
               >
                 <option value="UTC">UTC (Coordinated Universal Time)</option>
                 <option value="America/New_York">Eastern Time (ET)</option>
@@ -500,7 +500,7 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
                       type="date"
                       value={formData.startDate}
                       onChange={(e) => setFormData(prev => ({ ...prev, startDate: e.target.value }))}
-                  className="w-full pl-10 pr-3 py-2 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                  className="w-full pl-10 pr-3 py-2 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-gray-900"
                       required
                     />
                   </div>
@@ -517,7 +517,7 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
                       type="time"
                       value={formData.startTime}
                       onChange={(e) => setFormData(prev => ({ ...prev, startTime: e.target.value }))}
-                  className="w-full pl-10 pr-3 py-2 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                  className="w-full pl-10 pr-3 py-2 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-gray-900"
                       required
                     />
                   </div>
@@ -541,7 +541,7 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
                       type="date"
                       value={formData.endDate}
                       onChange={(e) => setFormData(prev => ({ ...prev, endDate: e.target.value }))}
-                  className="w-full pl-10 pr-3 py-2 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                  className="w-full pl-10 pr-3 py-2 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-gray-900"
                       required
                     />
                   </div>
@@ -558,7 +558,7 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
                       type="time"
                       value={formData.endTime}
                       onChange={(e) => setFormData(prev => ({ ...prev, endTime: e.target.value }))}
-                  className="w-full pl-10 pr-3 py-2 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                  className="w-full pl-10 pr-3 py-2 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-gray-900"
                       required
                     />
               </div>
@@ -648,7 +648,7 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
                                 placeholder="Search profiles..."
                                 value={profileSearchTerm}
                                 onChange={(e) => setProfileSearchTerm(e.target.value)}
-                                className="w-full pl-10 pr-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 placeholder-gray-500"
+                                className="w-full pl-10 pr-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-gray-900 placeholder-gray-500"
                               />
                             </div>
                           </div>
@@ -670,16 +670,16 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
                                       type="checkbox"
                                       checked={formData.profiles.includes(profile._id)}
                                       onChange={() => handleProfileToggle(profile._id)}
-                                      className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
+                                      className="w-4 h-4 rounded border-gray-300 text-purple-600 focus:ring-2 focus:ring-purple-500"
                                     />
                                     <div className="flex items-center space-x-2">
-                                      <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
-                                        <span className="text-blue-600 font-semibold text-xs">
-                                          {profile.name.charAt(0).toUpperCase()}
-                                        </span>
-                                      </div>
+                                        <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center">
+                                          <span className="text-purple-600 font-semibold text-xs">
+                                            {profile.name.charAt(0).toUpperCase()}
+                                          </span>
+                                        </div>
                                       <span className="text-sm font-medium text-gray-900">
-                                        {profile.name} {profile.isAdmin && <span className="text-blue-600 text-xs">(Admin)</span>}
+                                            {profile.name} {profile.isAdmin && <span className="text-purple-600 text-xs">(Admin)</span>}
                                       </span>
                                     </div>
                                   </label>
@@ -694,7 +694,7 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
                               <button
                                 type="button"
                                 onClick={() => setIsCreatingProfile(true)}
-                                className="w-full flex items-center justify-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full flex items-center justify-center space-x-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
                               >
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -712,7 +712,7 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
                                     placeholder="Enter profile name..."
                                     value={newProfileName}
                                     onChange={(e) => setNewProfileName(e.target.value)}
-                                    className="w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 placeholder-gray-500"
+                                    className="w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-gray-900 placeholder-gray-500"
                                     autoFocus
                                     onKeyDown={(e) => {
                                       if (e.key === 'Enter') {
@@ -727,7 +727,7 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
                                     type="button"
                                     onClick={handleCreateProfile}
                                     disabled={!newProfileName.trim()}
-                                    className="flex-1 bg-blue-600 text-white py-2 px-3 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className="flex-1 bg-purple-600 text-white py-2 px-3 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed"
                                   >
                                     Create
             </button>
@@ -757,7 +757,7 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
                   <select
                     value={formData.timezone}
                     onChange={(e) => setFormData(prev => ({ ...prev, timezone: e.target.value }))}
-                    className="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                    className="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-gray-900"
                   >
                     <option value="UTC">UTC (Coordinated Universal Time)</option>
                     <option value="America/New_York">Eastern Time (ET)</option>
@@ -788,7 +788,7 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
                         type="date"
                         value={formData.startDate}
                         onChange={(e) => setFormData(prev => ({ ...prev, startDate: e.target.value }))}
-                        className="w-full pl-10 pr-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                        className="w-full pl-10 pr-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-gray-900"
                         required
                       />
                     </div>
@@ -805,7 +805,7 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
                         type="time"
                         value={formData.startTime}
                         onChange={(e) => setFormData(prev => ({ ...prev, startTime: e.target.value }))}
-                        className="w-full pl-10 pr-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                        className="w-full pl-10 pr-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-gray-900"
                         required
                       />
                     </div>
@@ -829,7 +829,7 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
                         type="date"
                         value={formData.endDate}
                         onChange={(e) => setFormData(prev => ({ ...prev, endDate: e.target.value }))}
-                        className="w-full pl-10 pr-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                        className="w-full pl-10 pr-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-gray-900"
                         required
                       />
                     </div>
@@ -846,7 +846,7 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
                         type="time"
                         value={formData.endTime}
                         onChange={(e) => setFormData(prev => ({ ...prev, endTime: e.target.value }))}
-                        className="w-full pl-10 pr-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                        className="w-full pl-10 pr-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-gray-900"
                         required
                       />
                     </div>

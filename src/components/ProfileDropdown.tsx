@@ -60,7 +60,7 @@ export default function ProfileDropdown() {
       {/* Dropdown Trigger */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-between w-64 px-4 py-3 bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="flex items-center justify-between w-64 px-4 py-3 bg-purple-100 border border-purple-300 rounded-lg hover:bg-purple-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
       >
         <span className="text-gray-700 font-medium">
           {currentUser ? currentUser.name : 'Select current profile...'}
@@ -97,7 +97,7 @@ export default function ProfileDropdown() {
                   placeholder="Search current profile..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 placeholder-gray-500"
+                  className="w-full pl-10 pr-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-gray-900 placeholder-gray-500"
                 />
               </div>
             </div>
@@ -119,12 +119,12 @@ export default function ProfileDropdown() {
                     <button
                       key={profile._id}
                       onClick={() => handleProfileSelect(profile)}
-                      className={`w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200 ${
-                        currentUser?._id === profile._id ? 'bg-blue-50 border border-blue-200' : ''
+                      className={`w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-purple-50 transition-colors duration-200 ${
+                        currentUser?._id === profile._id ? 'bg-purple-50 border border-purple-200' : ''
                       }`}
                     >
-                      <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                        <span className="text-blue-600 font-semibold text-sm">
+                      <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
+                        <span className="text-purple-600 font-semibold text-sm">
                           {profile.name.charAt(0).toUpperCase()}
                         </span>
                       </div>
@@ -135,7 +135,7 @@ export default function ProfileDropdown() {
                         </div>
                       </div>
                       {currentUser?._id === profile._id && (
-                        <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
+                        <div className="w-2 h-2 bg-purple-600 rounded-full"></div>
                       )}
                     </button>
                   ))}
@@ -148,7 +148,7 @@ export default function ProfileDropdown() {
               {!isCreating ? (
                 <button
                   onClick={() => setIsCreating(true)}
-                  className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200"
+                  className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors duration-200"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -166,7 +166,7 @@ export default function ProfileDropdown() {
                       placeholder="Enter profile name..."
                       value={newProfileName}
                       onChange={(e) => setNewProfileName(e.target.value)}
-                      className="w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 placeholder-gray-500"
+                      className="w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-gray-900 placeholder-gray-500"
                       autoFocus
                     />
                   </div>
@@ -174,7 +174,7 @@ export default function ProfileDropdown() {
                     <button
                       type="submit"
                       disabled={!newProfileName.trim()}
-                      className="flex-1 bg-blue-600 text-white py-2 px-3 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+                      className="flex-1 bg-purple-600 text-white py-2 px-3 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
                     >
                       Create
                     </button>
