@@ -212,17 +212,27 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
     }));
   };
 
-  const handleCreateProfile = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleCreateProfile = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     if (!newProfileName.trim()) return;
 
     try {
       setLoading(true);
-      const newProfile = await apiService.createProfile(newProfileName.trim()) as User;
+      console.log('Creating profile:', newProfileName.trim(), 'with timezone:', selectedTimezone);
+      const newProfile = await apiService.createProfile(newProfileName.trim(), selectedTimezone) as User;
+      console.log('Profile created successfully:', newProfile);
       addUser(newProfile);
+      
+      // Automatically select the newly created profile
+      setFormData(prev => ({
+        ...prev,
+        profiles: [...prev.profiles, newProfile._id]
+      }));
+      
       setNewProfileName('');
       setIsCreatingProfile(false);
     } catch (error: any) {
+      console.error('Error creating profile:', error);
       setError(error.message || 'Failed to create profile');
     } finally {
       setLoading(false);
@@ -358,25 +368,25 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
                               key={profile._id}
                               className="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer"
                             >
-                              <input
-                                type="checkbox"
+                    <input
+                      type="checkbox"
                                 checked={formData.profiles.includes(profile._id)}
                                 onChange={() => handleProfileToggle(profile._id)}
-                                className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
-                              />
+                      className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
+                    />
                               <div className="flex items-center space-x-2">
                                 <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
                                   <span className="text-blue-600 font-semibold text-xs">
                                     {profile.name.charAt(0).toUpperCase()}
                                   </span>
                                 </div>
-                                <span className="text-sm font-medium text-gray-900">
+                    <span className="text-sm font-medium text-gray-900">
                                   {profile.name} {profile.isAdmin && <span className="text-blue-600 text-xs">(Admin)</span>}
-                                </span>
+                    </span>
                               </div>
-                            </label>
-                          ))}
-                        </div>
+                  </label>
+                ))}
+              </div>
                       )}
                     </div>
 
@@ -394,7 +404,7 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
                           <span>Add Profile</span>
                         </button>
                       ) : (
-                        <form onSubmit={handleCreateProfile} className="space-y-3">
+                        <div className="space-y-3">
                           <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
                             <label className="block text-sm font-medium text-gray-700 mb-2">
                               Profile Name
@@ -406,11 +416,18 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
                               onChange={(e) => setNewProfileName(e.target.value)}
                               className="w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 placeholder-gray-500"
                               autoFocus
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                  e.preventDefault();
+                                  handleCreateProfile(e as any);
+                                }
+                              }}
                             />
                           </div>
                           <div className="flex space-x-2">
                             <button
-                              type="submit"
+                              type="button"
+                              onClick={handleCreateProfile}
                               disabled={!newProfileName.trim()}
                               className="flex-1 bg-blue-600 text-white py-2 px-3 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
@@ -427,7 +444,7 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
                               Cancel
                             </button>
                           </div>
-                        </form>
+                        </div>
                       )}
                     </div>
                   </div>
@@ -469,7 +486,7 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
           {/* Start Date & Time Section */}
           <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Start Date & Time</h3>
-            <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-4">
               <div className="relative">
                 <svg
                   className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"
@@ -479,14 +496,14 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
-                <input
-                  type="date"
-                  value={formData.startDate}
-                  onChange={(e) => setFormData(prev => ({ ...prev, startDate: e.target.value }))}
+                    <input
+                      type="date"
+                      value={formData.startDate}
+                      onChange={(e) => setFormData(prev => ({ ...prev, startDate: e.target.value }))}
                   className="w-full pl-10 pr-3 py-2 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
-                  required
-                />
-              </div>
+                      required
+                    />
+                  </div>
               <div className="relative">
                 <svg
                   className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"
@@ -496,21 +513,21 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <input
-                  type="time"
-                  value={formData.startTime}
-                  onChange={(e) => setFormData(prev => ({ ...prev, startTime: e.target.value }))}
+                    <input
+                      type="time"
+                      value={formData.startTime}
+                      onChange={(e) => setFormData(prev => ({ ...prev, startTime: e.target.value }))}
                   className="w-full pl-10 pr-3 py-2 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
-                  required
-                />
+                      required
+                    />
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
 
           {/* End Date & Time Section */}
           <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">End Date & Time</h3>
-            <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-4">
               <div className="relative">
                 <svg
                   className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"
@@ -520,14 +537,14 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
-                <input
-                  type="date"
-                  value={formData.endDate}
-                  onChange={(e) => setFormData(prev => ({ ...prev, endDate: e.target.value }))}
+                    <input
+                      type="date"
+                      value={formData.endDate}
+                      onChange={(e) => setFormData(prev => ({ ...prev, endDate: e.target.value }))}
                   className="w-full pl-10 pr-3 py-2 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
-                  required
-                />
-              </div>
+                      required
+                    />
+                  </div>
               <div className="relative">
                 <svg
                   className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"
@@ -537,13 +554,13 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <input
-                  type="time"
-                  value={formData.endTime}
-                  onChange={(e) => setFormData(prev => ({ ...prev, endTime: e.target.value }))}
+                    <input
+                      type="time"
+                      value={formData.endTime}
+                      onChange={(e) => setFormData(prev => ({ ...prev, endTime: e.target.value }))}
                   className="w-full pl-10 pr-3 py-2 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
-                  required
-                />
+                      required
+                    />
               </div>
             </div>
           </div>
@@ -685,7 +702,7 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
                                 <span>Add Profile</span>
                               </button>
                             ) : (
-                              <form onSubmit={handleCreateProfile} className="space-y-3">
+                              <div className="space-y-3">
                                 <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
                                   <label className="block text-sm font-medium text-gray-700 mb-2">
                                     Profile Name
@@ -697,28 +714,35 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
                                     onChange={(e) => setNewProfileName(e.target.value)}
                                     className="w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 placeholder-gray-500"
                                     autoFocus
+                                    onKeyDown={(e) => {
+                                      if (e.key === 'Enter') {
+                                        e.preventDefault();
+                                        handleCreateProfile(e as any);
+                                      }
+                                    }}
                                   />
                                 </div>
                                 <div className="flex space-x-2">
                                   <button
-                                    type="submit"
+                                    type="button"
+                                    onClick={handleCreateProfile}
                                     disabled={!newProfileName.trim()}
                                     className="flex-1 bg-blue-600 text-white py-2 px-3 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
                                   >
                                     Create
-                                  </button>
-                                  <button
-                                    type="button"
+            </button>
+            <button
+              type="button"
                                     onClick={() => {
                                       setIsCreatingProfile(false);
                                       setNewProfileName('');
                                     }}
                                     className="flex-1 bg-gray-300 text-gray-700 py-2 px-3 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500"
-                                  >
-                                    Cancel
+            >
+              Cancel
                                   </button>
                                 </div>
-                              </form>
+                              </div>
                             )}
                           </div>
                         </div>
@@ -847,9 +871,9 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
                     className="flex-1 bg-purple-600 text-white py-3 px-6 rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors duration-200 text-base font-medium"
                   >
                     Update Event
-                  </button>
-                </div>
-              </form>
+            </button>
+          </div>
+        </form>
             </div>
           </div>
         </div>
