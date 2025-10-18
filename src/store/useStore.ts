@@ -29,8 +29,8 @@ export interface EventLog {
   updatedBy: User;
   changes: Array<{
     field: string;
-    oldValue: any;
-    newValue: any;
+    oldValue: unknown;
+    newValue: unknown;
   }>;
   userTimezone: string;
   timestamp: string;
@@ -70,7 +70,7 @@ interface AppState {
 
 export const useStore = create<AppState>()(
   devtools(
-    (set, get) => ({
+    (set) => ({
       // Current user
       currentUser: null,
       setCurrentUser: (user) => set({ currentUser: user }),

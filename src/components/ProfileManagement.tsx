@@ -20,8 +20,9 @@ export default function ProfileManagement() {
       addUser(newProfile);
       setNewProfileName('');
       setIsCreating(false);
-    } catch (error: any) {
-      setError(error.message || 'Failed to create profile');
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to create profile';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -75,7 +76,7 @@ export default function ProfileManagement() {
         {users.length === 0 ? (
           <div className="text-center py-8 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
             <p className="text-gray-600 text-lg">No profiles created yet</p>
-            <p className="text-sm text-gray-500 mt-1">Click "Add Profile" to create your first user profile</p>
+                <p className="text-sm text-gray-500 mt-1">Click &quot;Add Profile&quot; to create your first user profile</p>
           </div>
         ) : (
           <>

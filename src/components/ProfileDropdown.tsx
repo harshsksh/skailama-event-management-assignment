@@ -48,8 +48,9 @@ export default function ProfileDropdown() {
       addUser(newProfile);
       setNewProfileName('');
       setIsCreating(false);
-    } catch (error: any) {
-      setError(error.message || 'Failed to create profile');
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to create profile';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

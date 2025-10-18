@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useStore } from '@/store/useStore';
+import { useStore, Event } from '@/store/useStore';
 import { apiService } from '@/services/api';
 import EventManagement from '@/components/EventManagement';
 import EventList from '@/components/EventList';
@@ -24,7 +24,7 @@ export default function Home() {
   } = useStore();
 
   const [isInitialized, setIsInitialized] = useState(false);
-  const [editingEvent, setEditingEvent] = useState<any>(null);
+  const [editingEvent, setEditingEvent] = useState<Event | null>(null);
 
   useEffect(() => {
     initializeApp();
@@ -49,10 +49,11 @@ export default function Home() {
       }
       
       setIsInitialized(true);
-    } catch (error: any) {
-      console.error('Failed to initialize app:', error);
-      setError(error.message || 'Failed to initialize application');
-    } finally {
+        } catch (error: unknown) {
+          console.error('Failed to initialize app:', error);
+          const errorMessage = error instanceof Error ? error.message : 'Failed to initialize application';
+          setError(errorMessage);
+        } finally {
       setLoading(false);
     }
   };
@@ -64,8 +65,9 @@ export default function Home() {
       setCurrentUser(admin);
       setUsers([admin]);
       setSelectedTimezone(timezone);
-    } catch (error: any) {
-      setError(error.message || 'Failed to setup admin');
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to setup admin';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -85,8 +87,9 @@ export default function Home() {
         await apiService.updateProfileTimezone(currentUser._id, timezone);
         setCurrentUser({ ...currentUser, timezone });
       }
-    } catch (error: any) {
-      setError(error.message || 'Failed to update timezone');
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to update timezone';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

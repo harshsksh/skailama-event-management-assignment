@@ -10,10 +10,10 @@ import timezone from 'dayjs/plugin/timezone';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-export default function EventList({ editingEvent, setEditingEvent }: { editingEvent: any; setEditingEvent: (event: any) => void }) {
+export default function EventList({ editingEvent, setEditingEvent }: { editingEvent: Event | null; setEditingEvent: (event: Event | null) => void }) {
   const { events, setEvents, currentUser, selectedTimezone, setSelectedTimezone, setLoading, setError } = useStore();
-  const [selectedEvent, setSelectedEvent] = useState<any>(null);
-  const [eventLogs, setEventLogs] = useState<any[]>([]);
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  const [eventLogs, setEventLogs] = useState<EventLog[]>([]);
 
   useEffect(() => {
     loadEvents();
@@ -24,33 +24,34 @@ export default function EventList({ editingEvent, setEditingEvent }: { editingEv
       setLoading(true);
       const eventsData = await apiService.getEvents(selectedTimezone);
       setEvents(eventsData);
-    } catch (error: any) {
-      setError(error.message || 'Failed to load events');
-    } finally {
+        } catch (error: unknown) {
+          const errorMessage = error instanceof Error ? error.message : 'Failed to load events';
+          setError(errorMessage);
+        } finally {
       setLoading(false);
     }
   };
 
-  const handleEventClick = async (event: any) => {
+  const handleEventClick = async (event: Event) => {
     setSelectedEvent(event);
     try {
       const logs = await apiService.getEventLogs(event._id, selectedTimezone);
       setEventLogs(logs);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Failed to load event logs:', error);
     }
   };
 
-  const handleEditEvent = (event: any) => {
+  const handleEditEvent = (event: Event) => {
     setEditingEvent(event);
   };
 
-  const handleViewLogs = async (event: any) => {
+  const handleViewLogs = async (event: Event) => {
     setSelectedEvent(event);
     try {
       const logs = await apiService.getEventLogs(event._id, selectedTimezone);
       setEventLogs(logs);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Failed to load event logs:', error);
     }
   };
@@ -67,7 +68,7 @@ export default function EventList({ editingEvent, setEditingEvent }: { editingEv
     return dayjs(dateString).tz(timezone).format('MMM DD, YYYY [at] h:mm A');
   };
 
-  const getEventStatus = (event: any) => {
+  const getEventStatus = (event: Event) => {
     const now = dayjs();
     const start = dayjs(event.startDate);
     const end = dayjs(event.endDate);

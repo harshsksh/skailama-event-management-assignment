@@ -10,7 +10,7 @@ import timezone from 'dayjs/plugin/timezone';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-export default function EventManagement({ editingEvent, setEditingEvent }: { editingEvent: any; setEditingEvent: (event: any) => void }) {
+export default function EventManagement({ editingEvent, setEditingEvent }: { editingEvent: Event | null; setEditingEvent: (event: Event | null) => void }) {
   const { users, currentUser, addUser, addEvent, setEvents, setLoading, setError, selectedTimezone } = useStore();
   const [isCreating, setIsCreating] = useState(false);
   const [formData, setFormData] = useState({
@@ -117,10 +117,11 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
       addEvent(newEvent);
       resetForm();
       setIsCreating(false);
-    } catch (error: any) {
-      console.error('Event creation error:', error);
-      setError(error.message || 'Failed to create event');
-    } finally {
+        } catch (error: unknown) {
+          console.error('Event creation error:', error);
+          const errorMessage = error instanceof Error ? error.message : 'Failed to create event';
+          setError(errorMessage);
+        } finally {
       setLoading(false);
     }
   };
@@ -182,10 +183,11 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
       resetForm();
       setIsCreating(false);
       setEditingEvent(null);
-    } catch (error: any) {
-      console.error('Event update error:', error);
-      setError(error.message || 'Failed to update event');
-    } finally {
+        } catch (error: unknown) {
+          console.error('Event update error:', error);
+          const errorMessage = error instanceof Error ? error.message : 'Failed to update event';
+          setError(errorMessage);
+        } finally {
       setLoading(false);
     }
   };
@@ -231,10 +233,11 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
       
       setNewProfileName('');
       setIsCreatingProfile(false);
-    } catch (error: any) {
-      console.error('Error creating profile:', error);
-      setError(error.message || 'Failed to create profile');
-    } finally {
+        } catch (error: unknown) {
+          console.error('Error creating profile:', error);
+          const errorMessage = error instanceof Error ? error.message : 'Failed to create profile';
+          setError(errorMessage);
+        } finally {
       setLoading(false);
     }
   };
