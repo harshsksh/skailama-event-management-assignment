@@ -10,8 +10,8 @@ import timezone from 'dayjs/plugin/timezone';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-export default function EventList() {
-  const { events, setEvents, currentUser, selectedTimezone, setLoading, setError } = useStore();
+export default function EventList({ editingEvent, setEditingEvent }: { editingEvent: any; setEditingEvent: (event: any) => void }) {
+  const { events, setEvents, currentUser, selectedTimezone, setSelectedTimezone, setLoading, setError } = useStore();
   const [selectedEvent, setSelectedEvent] = useState<any>(null);
   const [eventLogs, setEventLogs] = useState<any[]>([]);
 
@@ -41,7 +41,29 @@ export default function EventList() {
     }
   };
 
+  const handleEditEvent = (event: any) => {
+    setEditingEvent(event);
+  };
+
+  const handleViewLogs = async (event: any) => {
+    setSelectedEvent(event);
+    try {
+      const logs = await apiService.getEventLogs(event._id, selectedTimezone);
+      setEventLogs(logs);
+    } catch (error: any) {
+      console.error('Failed to load event logs:', error);
+    }
+  };
+
   const formatDateTime = (dateString: string, timezone: string) => {
+    return dayjs(dateString).tz(timezone).format('MMM DD, YYYY');
+  };
+
+  const formatTime = (dateString: string, timezone: string) => {
+    return dayjs(dateString).tz(timezone).format('h:mm A');
+  };
+
+  const formatFullDateTime = (dateString: string, timezone: string) => {
     return dayjs(dateString).tz(timezone).format('MMM DD, YYYY [at] h:mm A');
   };
 
@@ -65,46 +87,112 @@ export default function EventList() {
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6">
-      <h2 className="text-xl font-semibold text-gray-900 mb-4">My Events</h2>
+      <h2 className="text-xl font-semibold text-gray-900 mb-4">Events</h2>
+      
+      {/* Timezone Selector */}
+      <div className="mb-6">
+        <label className="block text-sm font-medium text-gray-700 mb-2">View in Timezone</label>
+        <select
+          value={selectedTimezone}
+          onChange={(e) => {
+            setSelectedTimezone(e.target.value);
+          }}
+          className="w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+        >
+          <option value="UTC">UTC (Coordinated Universal Time)</option>
+          <option value="America/New_York">Eastern Time (ET)</option>
+          <option value="America/Chicago">Central Time (CT)</option>
+          <option value="America/Denver">Mountain Time (MT)</option>
+          <option value="America/Los_Angeles">Pacific Time (PT)</option>
+          <option value="Europe/London">London (BST/GMT)</option>
+          <option value="Europe/Paris">Paris (CEST/CET)</option>
+          <option value="Asia/Tokyo">Tokyo (JST)</option>
+          <option value="Asia/Shanghai">Shanghai (CST)</option>
+        </select>
+      </div>
       
       {filteredEvents.length === 0 ? (
         <p className="text-gray-500 text-center py-8">No events assigned to you</p>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-4">
           {filteredEvents.map((event) => {
             const status = getEventStatus(event);
             return (
               <div
                 key={event._id}
-                onClick={() => handleEventClick(event)}
-                className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors"
+                className="p-4 border border-gray-200 rounded-lg bg-white"
               >
-                <div className="flex justify-between items-start mb-2">
-                  <h3 className="font-medium text-gray-900">{event.title}</h3>
-                  <span className={`px-2 py-1 text-xs rounded-full ${status.color}`}>
-                    {status.status}
+                {/* Event Title */}
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">{event.title}</h3>
+
+                {/* Participants */}
+                <div className="flex items-center space-x-2 mb-3">
+                  <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
+                  </svg>
+                  <span className="text-sm font-medium text-gray-900">
+                    {event.profiles.map((profile: any) => profile.name).join(', ')}
                   </span>
                 </div>
-                
-                {event.description && (
-                  <p className="text-sm text-gray-600 mb-2">{event.description}</p>
-                )}
-                
-                <div className="text-sm text-gray-500 space-y-1">
-                  <p>
-                    <span className="font-medium">Start:</span>{' '}
-                    {formatDateTime(event.startDate, selectedTimezone)}
-                  </p>
-                  <p>
-                    <span className="font-medium">End:</span>{' '}
-                    {formatDateTime(event.endDate, selectedTimezone)}
-                  </p>
-                  <p>
-                    <span className="font-medium">Timezone:</span> {event.timezone}
-                  </p>
-                  <p>
-                    <span className="font-medium">Created by:</span> {event.createdBy.name}
-                  </p>
+
+                {/* Start Date & Time */}
+                <div className="space-y-1 mb-3">
+                  <div className="flex items-center space-x-2">
+                    <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <span className="text-sm text-gray-700">Start: {formatDateTime(event.startDate, selectedTimezone)}</span>
+                  </div>
+                  <div className="flex items-center space-x-2 ml-6">
+                    <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span className="text-sm text-gray-700">{formatTime(event.startDate, selectedTimezone)}</span>
+                  </div>
+                </div>
+
+                {/* End Date & Time */}
+                <div className="space-y-1 mb-3">
+                  <div className="flex items-center space-x-2">
+                    <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <span className="text-sm text-gray-700">End: {formatDateTime(event.endDate, selectedTimezone)}</span>
+                  </div>
+                  <div className="flex items-center space-x-2 ml-6">
+                    <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span className="text-sm text-gray-700">{formatTime(event.endDate, selectedTimezone)}</span>
+                  </div>
+                </div>
+
+                {/* Event Metadata */}
+                <div className="text-xs text-gray-500 space-y-1 mb-4">
+                  <p>Created: {formatFullDateTime(event.createdAt, selectedTimezone)}</p>
+                  <p>Updated: {formatFullDateTime(event.updatedAt, selectedTimezone)}</p>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex space-x-2">
+                  <button
+                    onClick={() => handleEditEvent(event)}
+                    className="flex items-center space-x-2 px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors duration-200"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                    <span className="text-sm">Edit</span>
+                  </button>
+                  <button
+                    onClick={() => handleViewLogs(event)}
+                    className="flex items-center space-x-2 px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors duration-200"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <span className="text-sm">View Logs</span>
+                  </button>
                 </div>
               </div>
             );
@@ -153,14 +241,29 @@ export default function EventList() {
 
               <div className="mb-4">
                 <h3 className="font-medium text-gray-900 mb-2">Assigned Profiles</h3>
-                <div className="flex flex-wrap gap-2">
+                <div className="space-y-2">
                   {selectedEvent.profiles.map((profile: any) => (
-                    <span
+                    <div
                       key={profile._id}
-                      className="px-2 py-1 bg-blue-100 text-blue-800 text-sm rounded-full"
+                      className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg"
                     >
-                      {profile.name}
-                    </span>
+                      <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                        <span className="text-blue-600 font-semibold text-sm">
+                          {profile.name.charAt(0).toUpperCase()}
+                        </span>
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-2">
+                          <span className="font-medium text-gray-900">{profile.name}</span>
+                          {profile.isAdmin && (
+                            <span className="px-2 py-1 text-xs font-semibold bg-blue-100 text-blue-800 rounded-full">
+                              Admin
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-sm text-gray-500">Timezone: {profile.timezone}</p>
+                      </div>
+                    </div>
                   ))}
                 </div>
               </div>

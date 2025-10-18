@@ -24,6 +24,7 @@ export default function Home() {
   } = useStore();
 
   const [isInitialized, setIsInitialized] = useState(false);
+  const [editingEvent, setEditingEvent] = useState<any>(null);
 
   useEffect(() => {
     initializeApp();
@@ -144,10 +145,16 @@ export default function Home() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div className="space-y-8">
-            <EventManagement />
+            <EventManagement 
+              editingEvent={editingEvent}
+              setEditingEvent={setEditingEvent}
+            />
           </div>
           <div>
-            <EventList />
+            <EventList 
+              editingEvent={editingEvent}
+              setEditingEvent={setEditingEvent}
+            />
           </div>
         </div>
       </main>
