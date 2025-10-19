@@ -130,10 +130,10 @@ export default function ProfileManagement() {
                       <p className="text-xs text-gray-500">{user.timezone}</p>
                     </div>
                   </div>
-                ))}
+                )) : null}
               </div>
               
-              {users.length > 3 && (
+              {Array.isArray(users) && users.length > 3 && (
                 <div className="mt-3 text-center">
                   <button 
                     onClick={() => setShowAllProfiles(!showAllProfiles)}
@@ -174,7 +174,7 @@ export default function ProfileManagement() {
                         <p className="text-xs text-gray-500">{user.timezone}</p>
                       </div>
                     </div>
-                  ))}
+                  )) : null}
                 </div>
               </div>
             )}

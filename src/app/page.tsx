@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useStore, Event } from '@/store/useStore';
+import { useStore, Event, User } from '@/store/useStore';
 import { apiService } from '@/services/api';
 import EventManagement from '@/components/EventManagement';
 import EventList from '@/components/EventList';
@@ -47,7 +47,7 @@ export default function Home() {
       
       setUsers(profiles);
       
-      const admin = profiles.find((user: any) => user.isAdmin);
+      const admin = profiles.find((user: User) => user.isAdmin);
       if (admin) {
         setCurrentUser(admin);
         setSelectedTimezone(admin.timezone);
