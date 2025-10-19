@@ -15,16 +15,29 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    // Return a mock profile object to match Express.js API format
-    const mockProfile = {
-      _id: 'mock-id-' + Date.now(),
-      name: body.name || 'Test Profile',
+    
+    // Mock event creation response to match Express.js API format
+    const mockEvent = {
+      _id: 'event-id-' + Date.now(),
+      title: body.title || 'Test Event',
+      description: body.description || '',
+      profiles: [],
       timezone: body.timezone || 'UTC',
-      isAdmin: false,
+      startDate: body.startDate || new Date().toISOString(),
+      endDate: body.endDate || new Date().toISOString(),
+      createdBy: {
+        _id: 'creator-id',
+        name: 'Event Creator',
+        timezone: 'UTC',
+        isAdmin: false,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      },
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     };
-    return NextResponse.json(mockProfile);
+    
+    return NextResponse.json(mockEvent);
   } catch (error) {
     return NextResponse.json(
       { error: 'Internal server error' },
