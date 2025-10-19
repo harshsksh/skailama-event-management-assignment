@@ -121,7 +121,7 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
           console.error('Event creation error:', error);
           const errorMessage = error instanceof Error ? error.message : 'Failed to create event';
           setError(errorMessage);
-        } finally {
+    } finally {
       setLoading(false);
     }
   };
@@ -187,7 +187,7 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
           console.error('Event update error:', error);
           const errorMessage = error instanceof Error ? error.message : 'Failed to update event';
           setError(errorMessage);
-        } finally {
+    } finally {
       setLoading(false);
     }
   };
@@ -245,7 +245,7 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
 
   // Filter profiles based on search term
   const filteredProfiles = users.filter(user =>
-    user.name.toLowerCase().includes(profileSearchTerm.toLowerCase())
+    user && user.name && user.name.toLowerCase().includes(profileSearchTerm.toLowerCase())
   );
 
   // Get selected profile names

@@ -29,7 +29,7 @@ export default function ProfileDropdown() {
 
   // Filter profiles based on search term
   const filteredProfiles = users.filter(user =>
-    user.name.toLowerCase().includes(searchTerm.toLowerCase())
+    user && user.name && user.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleProfileSelect = (profile: User) => {
@@ -55,6 +55,11 @@ export default function ProfileDropdown() {
       setLoading(false);
     }
   };
+
+  // Don't render if users array is not properly initialized
+  if (!users || !Array.isArray(users)) {
+    return null;
+  }
 
   return (
     <div className="relative" ref={dropdownRef}>
