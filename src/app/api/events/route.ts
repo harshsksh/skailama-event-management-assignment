@@ -9,13 +9,17 @@ dayjs.extend(timezone);
 
 // Connect to MongoDB
 const connectDB = async () => {
-  if (mongoose.connections[0].readyState) {
+  if (mongoose.connections[0].readyState === 1) {
+    console.log('MongoDB already connected');
     return;
   }
   try {
+    console.log('Connecting to MongoDB...');
     await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/event-management');
+    console.log('MongoDB connected successfully');
   } catch (error) {
     console.error('MongoDB connection error:', error);
+    throw error;
   }
 };
 
@@ -76,11 +80,17 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    console.log('Starting event creation...');
     await connectDB();
+    console.log('Database connected');
+    
     const body = await request.json();
+    console.log('Request body:', body);
+    
     const { title, description, profiles, timezone: eventTimezone, startDate, endDate, createdBy } = body;
 
     if (!title || !profiles || !startDate || !endDate || !createdBy) {
+      console.log('Missing required fields:', { title, profiles, startDate, endDate, createdBy });
       return NextResponse.json(
         { message: 'Missing required fields' },
         { status: 400 }
@@ -88,35 +98,47 @@ export async function POST(request: NextRequest) {
     }
 
     if (!Array.isArray(profiles) || profiles.length === 0) {
+      console.log('Invalid profiles array:', profiles);
       return NextResponse.json(
         { message: 'Profiles must be a non-empty array' },
         { status: 400 }
       );
     }
 
+    console.log('Validating creator...');
     // Validate creator exists
     const creator = await User.findById(createdBy);
     if (!creator) {
+      console.log('Creator not found:', createdBy);
       return NextResponse.json(
         { message: 'Invalid creator ID' },
         { status: 400 }
       );
     }
+    console.log('Creator validated:', creator.name);
 
+    console.log('Validating profiles...');
     // Validate profiles exist
     const validProfiles = await User.find({ _id: { $in: profiles } });
     if (validProfiles.length !== profiles.length) {
+      console.log('Profile validation failed:', {
+        requested: profiles,
+        found: validProfiles.map(p => p._id)
+      });
       return NextResponse.json(
         { message: 'One or more invalid profile IDs' },
         { status: 400 }
       );
     }
+    console.log('Profiles validated:', validProfiles.length);
 
+    console.log('Validating dates...');
     // Validate dates
     const start = dayjs(startDate);
     const end = dayjs(endDate);
 
     if (!start.isValid() || !end.isValid()) {
+      console.log('Invalid date format:', { startDate, endDate, startValid: start.isValid(), endValid: end.isValid() });
       return NextResponse.json(
         { message: 'Invalid date format' },
         { status: 400 }
@@ -124,16 +146,29 @@ export async function POST(request: NextRequest) {
     }
 
     if (end.isBefore(start)) {
+      console.log('End date before start date');
       return NextResponse.json(
         { message: 'End date must be after start date' },
         { status: 400 }
       );
     }
 
+    console.log('Converting dates to UTC...');
     // Convert dates to UTC for storage
-    const startDateUTC = start.tz(eventTimezone).utc().toDate();
-    const endDateUTC = end.tz(eventTimezone).utc().toDate();
+    let startDateUTC, endDateUTC;
+    try {
+      startDateUTC = start.tz(eventTimezone).utc().toDate();
+      endDateUTC = end.tz(eventTimezone).utc().toDate();
+      console.log('Date conversion completed:', { startDateUTC, endDateUTC });
+    } catch (tzError) {
+      console.log('Timezone conversion failed, using UTC:', tzError);
+      // Fallback to UTC if timezone conversion fails
+      startDateUTC = start.utc().toDate();
+      endDateUTC = end.utc().toDate();
+      console.log('Fallback date conversion completed:', { startDateUTC, endDateUTC });
+    }
 
+    console.log('Creating event object...');
     const event = new Event({
       title,
       description,
@@ -144,15 +179,26 @@ export async function POST(request: NextRequest) {
       createdBy
     });
 
+    console.log('Saving event to database...');
     await event.save();
+    console.log('Event saved successfully');
+
+    console.log('Populating event data...');
     await event.populate('profiles', 'name timezone');
     await event.populate('createdBy', 'name');
+    console.log('Event populated successfully');
 
+    console.log('Returning event:', event._id);
     return NextResponse.json(event, { status: 201 });
   } catch (error) {
     console.error('Error creating event:', error);
+    console.error('Error stack:', error instanceof Error ? error.stack : 'No stack trace');
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { 
+        error: 'Internal server error',
+        details: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      },
       { status: 500 }
     );
   }
