@@ -186,7 +186,7 @@ function AdminSetupForm({ onSubmit, isLoading }: { onSubmit: (name: string, time
           id="name"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+          className="w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-gray-900 placeholder-gray-500"
           placeholder="Enter admin name"
           required
         />
@@ -200,7 +200,7 @@ function AdminSetupForm({ onSubmit, isLoading }: { onSubmit: (name: string, time
           id="timezone"
           value={timezone}
           onChange={(e) => setTimezone(e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+          className="w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-gray-900"
         >
           <option value="UTC">UTC</option>
           <option value="America/New_York">Eastern Time</option>
@@ -214,13 +214,13 @@ function AdminSetupForm({ onSubmit, isLoading }: { onSubmit: (name: string, time
         </select>
       </div>
 
-      <button
-        type="submit"
-        disabled={isLoading || !name.trim()}
-        className="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        {isLoading ? 'Setting up...' : 'Setup Admin Account'}
-      </button>
+        <button
+          type="submit"
+          disabled={isLoading || !name.trim()}
+          className="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+        >
+          {isLoading ? 'Setting up...' : 'Setup Admin Account'}
+        </button>
     </form>
   );
 }
