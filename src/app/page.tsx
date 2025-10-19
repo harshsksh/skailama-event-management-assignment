@@ -154,10 +154,9 @@ export default function Home() {
             />
           </div>
           <div>
-            <EventList 
-              editingEvent={editingEvent}
-              setEditingEvent={setEditingEvent}
-            />
+                <EventList 
+                  setEditingEvent={setEditingEvent}
+                />
           </div>
         </div>
       </main>

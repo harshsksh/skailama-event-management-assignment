@@ -55,7 +55,7 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
       setFormData({
         title: editingEvent.title,
         description: editingEvent.description || '',
-        profiles: editingEvent.profiles.map((p: any) => p._id),
+        profiles: editingEvent.profiles.map((p: User) => p._id),
         timezone: editingEvent.timezone,
         startDate: startDateTime.format('YYYY-MM-DD'),
         startTime: startDateTime.format('HH:mm'),
@@ -242,11 +242,6 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
     }
   };
 
-  const handleCancel = () => {
-    resetForm();
-    setIsCreating(false);
-    setEditingEvent(null);
-  };
 
   // Filter profiles based on search term
   const filteredProfiles = users.filter(user =>
@@ -422,7 +417,7 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
                               onKeyDown={(e) => {
                                 if (e.key === 'Enter') {
                                   e.preventDefault();
-                                  handleCreateProfile(e as any);
+                                  handleCreateProfile(e as React.FormEvent);
                                 }
                               }}
                             />
@@ -720,7 +715,7 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
                                     onKeyDown={(e) => {
                                       if (e.key === 'Enter') {
                                         e.preventDefault();
-                                        handleCreateProfile(e as any);
+                                        handleCreateProfile(e as React.FormEvent);
                                       }
                                     }}
                                   />

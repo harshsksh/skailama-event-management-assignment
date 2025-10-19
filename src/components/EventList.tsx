@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useStore } from '@/store/useStore';
+import { useState, useEffect, useCallback } from 'react';
+import { useStore, Event, EventLog } from '@/store/useStore';
 import { apiService } from '@/services/api';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -10,37 +10,27 @@ import timezone from 'dayjs/plugin/timezone';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-export default function EventList({ editingEvent, setEditingEvent }: { editingEvent: Event | null; setEditingEvent: (event: Event | null) => void }) {
+export default function EventList({ setEditingEvent }: { setEditingEvent: (event: Event | null) => void }) {
   const { events, setEvents, currentUser, selectedTimezone, setSelectedTimezone, setLoading, setError } = useStore();
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [eventLogs, setEventLogs] = useState<EventLog[]>([]);
 
-  useEffect(() => {
-    loadEvents();
-  }, [selectedTimezone]);
-
-  const loadEvents = async () => {
+  const loadEvents = useCallback(async () => {
     try {
       setLoading(true);
       const eventsData = await apiService.getEvents(selectedTimezone);
       setEvents(eventsData);
-        } catch (error: unknown) {
-          const errorMessage = error instanceof Error ? error.message : 'Failed to load events';
-          setError(errorMessage);
-        } finally {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to load events';
+      setError(errorMessage);
+    } finally {
       setLoading(false);
     }
-  };
+  }, [selectedTimezone, setLoading, setEvents, setError]);
 
-  const handleEventClick = async (event: Event) => {
-    setSelectedEvent(event);
-    try {
-      const logs = await apiService.getEventLogs(event._id, selectedTimezone);
-      setEventLogs(logs);
-    } catch (error: unknown) {
-      console.error('Failed to load event logs:', error);
-    }
-  };
+  useEffect(() => {
+    loadEvents();
+  }, [loadEvents]);
 
   const handleEditEvent = (event: Event) => {
     setEditingEvent(event);
@@ -83,7 +73,7 @@ export default function EventList({ editingEvent, setEditingEvent }: { editingEv
   };
 
   const filteredEvents = events.filter(event => 
-    event.profiles.some((profile: any) => profile._id === currentUser?._id)
+    event.profiles.some((profile: User) => profile._id === currentUser?._id)
   );
 
   return (
@@ -115,10 +105,8 @@ export default function EventList({ editingEvent, setEditingEvent }: { editingEv
       {filteredEvents.length === 0 ? (
         <p className="text-gray-500 text-center py-8">No events assigned to you</p>
       ) : (
-        <div className="space-y-4">
-          {filteredEvents.map((event) => {
-            const status = getEventStatus(event);
-            return (
+            <div className="space-y-4">
+              {filteredEvents.map((event) => (
               <div
                 key={event._id}
                 className="p-4 border border-gray-200 rounded-lg bg-white"
@@ -131,9 +119,9 @@ export default function EventList({ editingEvent, setEditingEvent }: { editingEv
                   <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
                   </svg>
-                  <span className="text-sm font-medium text-gray-900">
-                    {event.profiles.map((profile: any) => profile.name).join(', ')}
-                  </span>
+                      <span className="text-sm font-medium text-gray-900">
+                        {event.profiles.map((profile: User) => profile.name).join(', ')}
+                      </span>
                 </div>
 
                 {/* Start Date & Time */}
@@ -196,9 +184,8 @@ export default function EventList({ editingEvent, setEditingEvent }: { editingEv
                   </button>
                 </div>
               </div>
-            );
-          })}
-        </div>
+              ))}
+            </div>
       )}
 
       {/* Event Details Modal */}
@@ -243,7 +230,7 @@ export default function EventList({ editingEvent, setEditingEvent }: { editingEv
               <div className="mb-4">
                 <h3 className="font-medium text-gray-900 mb-2">Assigned Profiles</h3>
                 <div className="space-y-2">
-                  {selectedEvent.profiles.map((profile: any) => (
+                  {selectedEvent.profiles.map((profile: User) => (
                     <div
                       key={profile._id}
                       className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg"
@@ -301,7 +288,7 @@ export default function EventList({ editingEvent, setEditingEvent }: { editingEv
                           </span>
                         </div>
                         <div className="space-y-1">
-                          {log.changes.map((change: any) => (
+                          {log.changes.map((change: { field: string; oldValue: unknown; newValue: unknown }) => (
                             <div key={`${log._id}-${change.field}`} className="text-sm">
                               <span className="font-medium text-gray-700">{change.field}:</span>{' '}
                               <span className="text-red-600 line-through">{String(change.oldValue)}</span>
