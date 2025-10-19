@@ -86,15 +86,15 @@ export default function ProfileManagement() {
                 <div>
                   <h3 className="text-lg font-semibold text-blue-900">Profile Summary</h3>
                   <p className="text-sm text-blue-700">
-                    Total Profiles: <span className="font-semibold">{users.length}</span>
+                    Total Profiles: <span className="font-semibold">{Array.isArray(users) ? users.length : 0}</span>
                   </p>
                 </div>
                 <div className="text-right">
                   <p className="text-sm text-blue-700">
-                    Admin Profiles: <span className="font-semibold">{users.filter(u => u.isAdmin).length}</span>
+                    Admin Profiles: <span className="font-semibold">{Array.isArray(users) ? users.filter(u => u.isAdmin).length : 0}</span>
                   </p>
                   <p className="text-sm text-blue-700">
-                    Regular Profiles: <span className="font-semibold">{users.filter(u => !u.isAdmin).length}</span>
+                    Regular Profiles: <span className="font-semibold">{Array.isArray(users) ? users.filter(u => !u.isAdmin).length : 0}</span>
                   </p>
                 </div>
               </div>
@@ -103,10 +103,10 @@ export default function ProfileManagement() {
             {/* Recent Profiles (Show only last 3) */}
             <div>
               <h4 className="text-md font-semibold text-gray-900 mb-3">
-                Recent Profiles {users.length > 3 && `(Showing last 3 of ${users.length})`}
+                Recent Profiles {Array.isArray(users) && users.length > 3 && `(Showing last 3 of ${users.length})`}
               </h4>
               <div className="space-y-2">
-                {users.slice(-3).map((user) => (
+                {Array.isArray(users) ? users.slice(-3).map((user) => (
                   <div
                     key={user._id}
                     className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors duration-200"
@@ -146,11 +146,11 @@ export default function ProfileManagement() {
             </div>
 
             {/* All Profiles View (Expandable) */}
-            {showAllProfiles && users.length > 3 && (
+            {showAllProfiles && Array.isArray(users) && users.length > 3 && (
               <div className="mt-4 border-t pt-4">
                 <h4 className="text-md font-semibold text-gray-900 mb-3">All Profiles</h4>
                 <div className="max-h-64 overflow-y-auto space-y-2">
-                  {users.map((user) => (
+                  {Array.isArray(users) ? users.map((user) => (
                     <div
                       key={user._id}
                       className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors duration-200"

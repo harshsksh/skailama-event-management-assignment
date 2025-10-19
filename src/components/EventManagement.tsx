@@ -244,12 +244,12 @@ export default function EventManagement({ editingEvent, setEditingEvent }: { edi
 
 
   // Filter profiles based on search term
-  const filteredProfiles = users.filter(user =>
+  const filteredProfiles = Array.isArray(users) ? users.filter(user =>
     user && user.name && user.name.toLowerCase().includes(profileSearchTerm.toLowerCase())
-  );
+  ) : [];
 
   // Get selected profile names
-  const selectedProfiles = users.filter(user => formData.profiles.includes(user._id));
+  const selectedProfiles = Array.isArray(users) ? users.filter(user => formData.profiles.includes(user._id)) : [];
 
   return (
     <div className="bg-white rounded-lg shadow-lg p-8 max-w-4xl mx-auto">

@@ -36,6 +36,15 @@ export default function Home() {
       
       // Check if admin exists, if not show setup
       const profiles = await apiService.getProfiles();
+      
+      // Ensure profiles is an array
+      if (!Array.isArray(profiles)) {
+        console.error('Profiles data is not an array:', profiles);
+        setUsers([]);
+        setIsInitialized(true);
+        return;
+      }
+      
       setUsers(profiles);
       
       const admin = profiles.find((user: any) => user.isAdmin);
@@ -49,11 +58,15 @@ export default function Home() {
       }
       
       setIsInitialized(true);
-        } catch (error: unknown) {
-          console.error('Failed to initialize app:', error);
-          const errorMessage = error instanceof Error ? error.message : 'Failed to initialize application';
-          setError(errorMessage);
-        } finally {
+    } catch (error: unknown) {
+      console.error('Failed to initialize app:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Failed to initialize application';
+      setError(errorMessage);
+      // Set empty arrays to prevent further errors
+      setUsers([]);
+      setEvents([]);
+      setIsInitialized(true);
+    } finally {
       setLoading(false);
     }
   };
