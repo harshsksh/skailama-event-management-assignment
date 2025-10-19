@@ -154,18 +154,16 @@ export async function POST(request: NextRequest) {
     }
 
     console.log('Converting dates to UTC...');
-    // Convert dates to UTC for storage
+    // Convert dates to UTC for storage - simplified approach
     let startDateUTC, endDateUTC;
     try {
-      startDateUTC = start.tz(eventTimezone).utc().toDate();
-      endDateUTC = end.tz(eventTimezone).utc().toDate();
+      // Simple conversion without timezone plugin
+      startDateUTC = new Date(startDate);
+      endDateUTC = new Date(endDate);
       console.log('Date conversion completed:', { startDateUTC, endDateUTC });
-    } catch (tzError) {
-      console.log('Timezone conversion failed, using UTC:', tzError);
-      // Fallback to UTC if timezone conversion fails
-      startDateUTC = start.utc().toDate();
-      endDateUTC = end.utc().toDate();
-      console.log('Fallback date conversion completed:', { startDateUTC, endDateUTC });
+    } catch (dateError) {
+      console.log('Date conversion failed:', dateError);
+      throw new Error('Invalid date format');
     }
 
     console.log('Creating event object...');
